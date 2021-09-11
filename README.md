@@ -6,6 +6,9 @@ MakeTime is a clock that uses a ring of 24 RGB LEDs to display time. Hours and m
 
 MakeTime is also an Arduino-compatible development platform, and is designed with hacking in mind. In addition to the addressable LEDs, the button and the DS3231 RTC, makers can access many of the Arduino pins on an expansion header they can populate themselves.
 
+# Hardware
+[EasyEDA project] (https://easyeda.com/mihai.cuciuc/clock_v2-0_copy_copy_copy_copy_copy_copy_copy_copy)
+
 # Images
 ![image](https://github.com/mihaicuciuc/MakeTime/blob/main/MakeTime.jpg)
 
