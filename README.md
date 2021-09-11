@@ -10,3 +10,5 @@ MakeTime is also an Arduino-compatible development platform, and is designed wit
 ![image](https://github.com/mihaicuciuc/MakeTime/blob/main/MakeTime.jpg)
 
 ![image](https://github.com/mihaicuciuc/MakeTime/blob/main/MakeTime_backs.jpg)
+
+![image](https://github.com/mihaicuciuc/MakeTime/blob/main/timelapse.gif)
