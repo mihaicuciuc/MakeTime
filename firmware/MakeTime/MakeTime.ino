@@ -25,7 +25,7 @@ const uint8_t colorMapArray[][3][12] PROGMEM = {
   {60, 0, 0,    0, 0, 60,    4, 5, 5,   4, 5, 5},   // Mid intensity
   {255, 0, 0,   0, 0, 255,   20, 20, 20,  20, 20, 20},   // High intensity
  },
-// Map 1, ??
+// Map 1, Colours
  {
   {10, 10, 0,   0, 5, 15,    3, 3, 4,   2, 0, 0},   // Low intensity
   {70, 70, 0,   0, 42, 90,   6, 7, 7,   6, 0, 0},   // Mid intensity
@@ -230,21 +230,20 @@ void loop()
     }
   }
 
+  if (state > 3)
+  {
+    state = 0;
+  }
+
   if ((millis() - buttonTimeStamp) >= 5000)
   {
-    if ((state != 5) && (state != 6))
-    {
-      state = 0;
-    }
+    state = 0;
   }
 
   if (oldState != state)
   {
     // Handle state transition actions here.
     if (3 == oldState) EEPROM.write(4, colorMap);
-    if (4 == oldState) EEPROM.write(3, ledOffset);
-    if (5 == oldState) EEPROM.write(1, adcThr[0]);
-    if (6 == oldState) EEPROM.write(2, adcThr[1]);
     if (0 == state) showAnimation();
   }
 
@@ -263,16 +262,7 @@ void loop()
     case 3:
       runSetColorMap(buttonPressed);
       break;
-    case 4:
-      runSetOrientation(buttonPressed);
-      break;
-    case 5:
-      runSetBrightness(0, buttonPressed);
-      break;
-    case 6:
-      runSetBrightness(1, buttonPressed);
-      break;
-  }
+   }
 
   buttonPressed = 0;
 }
@@ -307,22 +297,6 @@ void runSetColorMap(uint8_t buttonPressed)
   strip.show();
 }
 
-
-void runSetOrientation(uint8_t buttonPressed)
-{
-  if (buttonPressed != 0)
-  {
-    ledOffset++;
-    ledOffset %= 24;
-  }
-  
-  strip.clear();
-  setColor(0, colorFace1[colorIdx]);
-  setColor(11, colorFace2[colorIdx]);
-  setColor(12, colorFace2[colorIdx]);
-  setColor(13, colorFace2[colorIdx]);
-  strip.show();
-}
 
 
 void runSetH(uint8_t buttonPressed)
@@ -366,46 +340,6 @@ void runSetM(uint8_t buttonPressed)
   {
     setColor((ledM + i + 1) % 24, colorFace2[colorIdx]);
   }
-  strip.show();
-}
-
-void runSetBrightness(uint8_t thrIdx, uint8_t buttonPressed)
-{
-  uint32_t color;
-  uint8_t led;
-
-  if (buttonPressed == 1)
-  {
-    adcThr[thrIdx] += 1;
-    if (adcThr[thrIdx] >= 24) adcThr[thrIdx] = 0;
-  }
-
-  led = analogRead(A0)/40;
-
-  if (led > 24) led = 24;
-
-  if (thrIdx == 0) color = colorFace1[colorIdx];
-  else color = colorFace2[colorIdx];
-
-  // draw ADC reading
-  strip.clear();
-  for (i = 0; i < led ; i++)
-  {
-    setColor(i, color);
-  }
-
-  // put marker for 1st threshold
-  led = adcThr[0];
-  color = getColor(led);
-  color += colorM[colorIdx];
-  setColor(led, color);
-
-  // marker for 2nd threshold
-  led = adcThr[1];
-  color = getColor(led);
-  color += colorH[colorIdx];
-  setColor(led, color);
-
   strip.show();
 }
 
